@@ -1,0 +1,20 @@
+Idé:
+Program som ger rekommendation på benchmark-pass (girl, hero eller annat benchmark)
+
+Frågor till användaren:
+Typ av pass? AMRAP / For time
+Övning, skriv en bokstav för förslag: T.ex. "Wall balls", "Rope Climbs" eller liknande
+Ge förslag med pass som stämmer in
+
+Data som behövs:
+ett pass:
+type: AMRAP / FT
+rounds: None / antal
+time: 20 / None
+movements: {"Wall ball": 20, "Burpees": 10}
+
+
+sök:
+Type först
+movement:
+Graph?
