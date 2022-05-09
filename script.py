@@ -1,5 +1,6 @@
 from data import workouts
 
+#Adding dict with movements as keys and all workouts including the movement as a list
 workouts_with_movement = {}
 for workout_name in workouts.keys():
   for mvmt in workouts[workout_name].movements:
@@ -8,6 +9,7 @@ for workout_name in workouts.keys():
     else:
       workouts_with_movement[mvmt].append(workout_name)
 
+#Greeting message
 def greet():
     print("""¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶
 ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶11_____1¶¶¶¶¶¶¶
@@ -40,37 +42,51 @@ def greet():
     """)
     print("Welcome to workout recommendations!")
 
+#Function to find the movement of choice
 def find_movement():
     movement_letters = input("Which movement would you like your workout to include? Write the first letter and enter:\n")
     movements = get_movement_recommendation_from_letters(movement_letters)
+
+    #If there are multiple movements matching the input letters, search again
     while len(movements) > 1:
         print("\nThese are the available movements: {}".format(movements))
         movement_letters = input("Write the first letters of the movement you'd like to include\n")
         movements = get_movement_recommendation_from_letters(movement_letters)
+
+    #If there's no movements matching the input, give the user a chance to start over
     if len(movements) == 0:
         start_over_option = input("Sorry, no movement, would you like to start over? (y / n)\n")
         if start_over_option == "y":
             find_movement()
+    
+    #If there's only one matching movement, print and return it
     else:
-        print('Okay, {}'.format(movements[0]))
+        print('\nOkay, {}!'.format(movements[0]))
         return movements[0]
         
+
+#Choose a workout including movement
 def find_workout(movement):
     possible_workouts = workouts_with_movement[movement]
-    print("Possible workouts:\n")
+    print("Possible workouts:")
+
     for i in range(len(possible_workouts)):
+        #Print a numbered list of possible workouts, and let the user choose from the number
         print("{0} - {1}".format(i+1, workouts[possible_workouts[i]].name))
-    user_choice = int(input("Enter the number for the workout you want\n"))
+    user_choice = int(input("\nEnter the number for the workout you want\n"))
+
     if user_choice - 1 > len(possible_workouts) or user_choice < 1:
         user_choice = input("Oops, try again.")
+    
+    #Return the workout name
     return possible_workouts[user_choice - 1]
 
 def choose_workout():
     movement = find_movement()
     workout = find_workout(movement)
-    print("Here's your workout:\n")
+    print("\n============================\nHere's your workout:\n")
     print(workouts[workout].get_workout())
-    one_more_time = input('Would you like to choose another workout? (y / n)\n')
+    one_more_time = input('============================\nWould you like to choose another workout? (y / n)\n')
     if one_more_time == "y":
         choose_workout()
 
@@ -81,18 +97,6 @@ def get_movement_recommendation_from_letters(letters):
             possible_movements.append(movement)
     return possible_movements
 
-def get_workout_recommendation_from_letters(lst, letters):
-    possible_workouts = []
-    for workout in lst:
-        if workout[0:len(letters)] == letters:
-            possible_workouts.append(workout)
-    return possible_workouts
-
-def get_workout_recommendation(movement):
-    if movement in workouts_with_movement.keys():
-        print("These workouts include {}:".format(movement))
-        for workout in workouts_with_movement[movement]:
-            print("- " + workouts[workout].name)
 
 def goodbye():
     print("Thanks for using the workout recommendator")
