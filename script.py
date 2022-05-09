@@ -61,8 +61,11 @@ def find_movement():
     
     #If there's only one matching movement, print and return it
     else:
-        print('\nOkay, {}!'.format(movements[0]))
-        return movements[0]
+        user_input = input('\nOkay, {}? (y / n)\n'.format(movements[0]))
+        if user_input == "y":
+            return movements[0]
+        else:
+            find_movement()
         
 
 #Choose a workout including movement
