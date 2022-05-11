@@ -1,37 +1,43 @@
+#Class for constructing workouts
 class Workout:
   def __init__(self, name, measurement, rounds_or_time, movements, reps, weights, same_varying_reps=False):
     #Measurement is AMRAP or For time
     self.name = name
     self.measurement = measurement
-    #Number of rounds
+    #Number of rounds if the workout is for time, or number of minutes for AMRAP's
     self.rounds_or_time = rounds_or_time
+    #List of movements included
     self.movements = movements
+    #Reps for the movements
     self.reps = reps
+    #Weights for the movements
     self.weights = weights
+    #If there's a rep scheme for all movements (like 21-15-9), this is True and self.reps is the rep scheme
     self.same_varying_reps = same_varying_reps
 
   def get_workout(self):
     workout_as_string = ""
     workout_as_string += "Workout name: {0}\n".format(self.name)
-
-    #AMRAP
+    
+    #AMRAP workouts:
     if self.measurement.lower() == 'amrap':
       workout_as_string += "As many rounds or reps as possible in {0} minutes of:\n".format(self.rounds_or_time)
       for i in range(len(self.movements)):
         weight = ""
+        if len(self.movements) > 1:
+          workout_as_string += "{0} ".format(self.reps[i])
         if self.weights[i]:
           weight += ", {0} kg".format(self.weights[i])
-        workout_as_string += "{reps} {movement}{weight}\n".format(reps = self.reps[i], movement = self.movements[i], weight = weight)
+        workout_as_string += "{movement}{weight}\n".format(movement = self.movements[i], weight = weight)
 
-    #For time  
+    #For time workouts: 
     elif self.measurement.lower() == 'for time':
       workout_as_string += "For time"
-
       if self.same_varying_reps:
         same_reps_string = " "
         for i in range(len(self.reps)):
           if i > 0:
-            same_reps_string += "/"
+            same_reps_string += "-"
           same_reps_string += "{0}".format(self.reps[i])
         workout_as_string += "{0} reps of:\n".format(same_reps_string)
         for i in range(len(self.movements)):
@@ -39,7 +45,6 @@ class Workout:
           if self.weights[i]:
             weight += ", {0} kg".format(self.weights[i])
           workout_as_string += "{movement}{weight}\n".format(reps = self.reps[i], movement = self.movements[i].capitalize(), weight = weight)
-
       else:
         if self.rounds_or_time > 1:
           workout_as_string += ", {0} rounds of".format(self.rounds_or_time)
@@ -52,9 +57,10 @@ class Workout:
 
     return workout_as_string
 
-
+#Initialize a dictionary to contain all the specific workouts
 workouts = {}
 
+#Fill the dict with data
 workouts['Cindy'] = Workout('Cindy', 'AMRAP', 20, ['pull-ups', 'push-ups', 'air squats'], [5, 10, 15], [None, None, None])
 workouts['Fran'] = Workout('Fran', 'For time', 3, ['pull-ups', 'thrusters'], [21,15,9], [None, 43], True)
 workouts['Diane'] = Workout('Diane', 'For time', 3, ['deadlifts', 'handstand push-ups'], [21,15,9], [102, None], True)
@@ -74,5 +80,9 @@ workouts['Open 11.1'] = Workout('Open 11.1', 'AMRAP', 10, ['double unders', 'pow
 workouts['Open 14.5'] = Workout('Open 14.5', 'For time', 7, ['thrusters', 'bar facing burpees'], [21, 18, 15, 12, 9, 6, 3], [43, None], True)
 workouts['Open 18.2'] = Workout('Open 18.2', 'For time', 10, ['dumbbell squats', 'bar facing burpees'], [1,2,3,4,5,6,7,8,9,10], [22.5, None], True)
 workouts['Amanda'] = Workout('Amanda', 'For time', 3, ['ring muscle-ups', 'squat snatches'], [9,7,5], [None, 60], True)
+workouts['Open 12.1'] = Workout('Open 12.1', 'AMRAP', 7, ['burpees'], [None], [None])
+workouts['Linchpin Test 5'] = Workout('Linchpin Test 5', 'For time', 1, ['back squats', 'run', 'back squats'], [20, "2 miles", 20], [102, None, 102])
+workouts['Linchpin Test 9'] = Workout('Linchpin Test 9', 'For time', 5, ['handstand walk', 'squat cleans'], ["50 ft", 5], [None, 102])
+workouts['Linchpin Test 14'] = Workout('Linchpin Test 14', 'For time', 1, ['clean & jerks', 'bike calories', 'clean & jerks'], [15, 30, 15], [60, None, 60])
   
 
